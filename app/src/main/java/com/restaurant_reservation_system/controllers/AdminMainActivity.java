@@ -53,6 +53,17 @@ public class AdminMainActivity extends AppCompatActivity {
         drawerView = (View) findViewById(R.id.drawerView);
         drawerLayout.setDrawerListener(listener);
 
+        Button btnOnSite = findViewById(R.id.btnOnSite);
+        btnOnSite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDate2();
+                //Intent intent2 = new Intent(AdminMainActivity.this, OnSiteReservationActivity.class);
+               // startActivity(intent2);
+
+            }
+        });
+        //현장예약 버튼
 
         Button btnArrivalTime = (Button) findViewById(R.id.noShow_btn);
         btnArrivalTime.setOnClickListener(new View.OnClickListener() {
@@ -149,6 +160,39 @@ public class AdminMainActivity extends AppCompatActivity {
         datePickerDialog.show();
 
     }
+    void showDate2() {
+        //달력 보여주는 함수
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        Intent intent = new Intent(getApplicationContext(), OnSiteReservationActivity.class);
+        intent.putExtra("id", getStringId);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+
+            }
+        }, cal.get(cal.YEAR), cal.get(cal.MONTH), cal.get(cal.DATE));
+        datePickerDialog.setButton(
+                DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int DAY = datePickerDialog.getDatePicker().getDayOfMonth();
+                        int MONTH = datePickerDialog.getDatePicker().getMonth();
+                        int YEAR = datePickerDialog.getDatePicker().getYear();
+                        intent.putExtra("day", DAY);
+                        intent.putExtra("month", MONTH);
+                        intent.putExtra("year", YEAR);
+                        // intent.putExtra("maxNum", max_num);
+
+                        startActivity(intent);
+                    }
+                }
+        );
+
+        datePickerDialog.setMessage("날짜를 선택해주세요");
+        datePickerDialog.show();
+
+    }
 
     DrawerLayout.DrawerListener listener = new DrawerLayout.DrawerListener() {
         @Override
@@ -171,7 +215,7 @@ public class AdminMainActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-             String site = "http://192.168.219.100/reservation.php";
+             String site = "http://192.168.0.103/reservation.php";
                 URL url = new URL(site);
                 //접속
                 URLConnection conn = url.openConnection();
